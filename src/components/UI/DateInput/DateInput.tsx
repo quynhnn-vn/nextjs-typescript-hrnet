@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DateInputProps } from "src/utils/types";
-import DatePicker from "src/components/DateInput/DatePicker";
+import DatePicker from "src/components/UI/DateInput/DatePicker";
 import { format } from "date-fns";
 import { Popover } from "@mui/material";
 

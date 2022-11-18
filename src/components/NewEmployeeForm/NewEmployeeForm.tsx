@@ -1,17 +1,19 @@
 import React, { useRef, useState } from "react";
 import { DateType, NewEmployeeValues } from "src/utils/types";
-import DateInput from "src/components/DateInput/DateInput";
+import DateInput from "src/components/UI/DateInput/DateInput";
 import { FORM_FIELDS, initialFormValues } from "src/utils/variables";
 import { useAppDispatch } from "src/hooks/hooks";
 import {
   addNewEmployee,
   resetNewEmployee,
 } from "src/store/features/employeeSlice";
-import SelectInput from "src/components/SelectInput/SelectInput";
+import SelectInput from "src/components/UI/SelectInput/SelectInput";
 import { format } from "date-fns";
+import { v4 } from "uuid";
 
 export default function NewEmployeeForm() {
-  const [formValues, setFormValues] = useState(initialFormValues);
+  const [formValues, setFormValues] =
+    useState<NewEmployeeValues>(initialFormValues);
 
   const dispatch = useAppDispatch();
 
@@ -30,6 +32,7 @@ export default function NewEmployeeForm() {
 
     setFormValues((prev: NewEmployeeValues) => ({
       ...prev,
+      id: v4(),
       [id as keyof NewEmployeeValues]: _value,
     }));
   };
@@ -38,8 +41,6 @@ export default function NewEmployeeForm() {
     e.preventDefault();
     dispatch(addNewEmployee(formValues));
   };
-
-  console.log("formValues", formValues);
 
   const handleResetEmployee = () => {
     setFormValues(initialFormValues);
@@ -52,10 +53,10 @@ export default function NewEmployeeForm() {
         Create Employee
       </h2>
       <form onSubmit={handleAddEmployee}>
-        <div className="columns-2 text-center">
+        <div className="columns-2 text-center shadow rounded p-10">
           {FORM_FIELDS.map((field) => (
             <div key={field.id} className="w-full my-1 flex items-center">
-              <label htmlFor={field.id} className="w-1/4">
+              <label htmlFor={field.id} className="w-1/4 text-left">
                 {field.placeholder}
               </label>
               {(field.type === "text" || field.type === "number") && (

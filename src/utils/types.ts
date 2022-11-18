@@ -95,3 +95,11 @@ export interface SelectDropDownProps {
   handleHideCalendar: () => void;
   options: SelectItemType[];
 }
+export interface TableProps {
+  listEmployees: Array<NewEmployeeValues>;
+}
+
+export interface SearchInputProps {
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+}

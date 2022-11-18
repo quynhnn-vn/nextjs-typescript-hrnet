@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
-import AddEmployeeForm from "src/components/NewEmployeeForm/NewEmployeeForm";
+import NewEmployeeForm from "src/components/NewEmployeeForm/NewEmployeeForm";
 
 const Home: NextPage = () => {
   return (
     <main className="font-body h-screen">
-      <AddEmployeeForm />
+      <NewEmployeeForm />
     </main>
   );
 };

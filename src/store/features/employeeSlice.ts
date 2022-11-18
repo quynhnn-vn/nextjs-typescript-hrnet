@@ -18,8 +18,29 @@ export const newEmployeeSlice = createSlice({
       action: PayloadAction<NewEmployeeValues>
     ) => {
       state.newEmployee = action.payload;
+      let localEmployees = [];
+      if (typeof window !== "undefined") {
+        const employees = localStorage.getItem("listEmployees");
+        if (employees) {
+          localEmployees = JSON.parse(employees);
+        }
+        state.listEmployees = localEmployees;
+      }
       state.listEmployees = [action.payload, ...state.listEmployees];
-      localStorage.setItem("employees", JSON.stringify(state));
+      localStorage.setItem(
+        "listEmployees",
+        JSON.stringify(state.listEmployees)
+      );
+    },
+    getListEmployees: (state: EmployeesState) => {
+      let localEmployees = [];
+      if (typeof window !== "undefined") {
+        const employees = localStorage.getItem("listEmployees");
+        if (employees) {
+          localEmployees = JSON.parse(employees);
+        }
+        state.listEmployees = localEmployees;
+      }
     },
     resetNewEmployee: (state: EmployeesState) => {
       state.newEmployee = initialFormValues;
@@ -36,10 +57,17 @@ export const newEmployeeSlice = createSlice({
   },
 });
 
-export const { addNewEmployee, resetNewEmployee } = newEmployeeSlice.actions;
-export const selectNewEmployee = (state: AppState) =>
-  state.employees.newEmployee;
-export const selectListEmployees = (state: AppState) =>
-  state.employees.listEmployees;
+export const { addNewEmployee, getListEmployees, resetNewEmployee } =
+  newEmployeeSlice.actions;
+export const selectListEmployees = (state: AppState) => {
+  let localEmployees = [];
+  if (typeof window !== "undefined") {
+    const employees = localStorage.getItem("listEmployees");
+    if (employees) {
+      localEmployees = JSON.parse(employees);
+    }
+  }
+  return localEmployees || state.employees.listEmployees;
+};
 
 export default newEmployeeSlice.reducer;

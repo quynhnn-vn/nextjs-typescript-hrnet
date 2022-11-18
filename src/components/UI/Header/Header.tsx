@@ -19,7 +19,7 @@ export default function Header() {
       click: () => handlePushRouter("/"),
     },
     {
-      text: "View Current Employees",
+      text: "Current Employees",
       path: "/list",
       click: () => handlePushRouter("/list"),
     },

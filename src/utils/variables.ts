@@ -1,4 +1,4 @@
-import { uniqueId } from "lodash";
+import { v4 } from "uuid";
 
 export const COLORS = {
   primary: "#547404",
@@ -12,6 +12,7 @@ export const SIZE = {
 };
 
 export const initialFormValues = {
+  id: v4(),
   firstName: "",
   lastName: "",
   birthday: "01/01/2020",
