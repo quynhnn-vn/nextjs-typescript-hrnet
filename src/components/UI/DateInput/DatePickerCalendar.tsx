@@ -21,7 +21,10 @@ export default function DatePickerCalendar(props: DatePickerCalendarProps) {
     handleHideCalendar();
   };
 
-  const rows = useMemo(() => getCalendarRows(new Date(shownDate)), [shownDate]);
+  const rows = useMemo(
+    () => getCalendarRows(shownDate ? new Date(shownDate) : new Date()),
+    [shownDate]
+  );
 
   return (
     <div className="text-center">

@@ -1,7 +1,13 @@
 import React, { useRef, useState } from "react";
 import { DateType, NewEmployeeValues } from "src/utils/types";
 import DateInput from "src/components/UI/DateInput/DateInput";
-import { FORM_FIELDS, initialFormValues } from "src/utils/variables";
+import {
+  COLORS,
+  DEPARTMENTS,
+  FORM_FIELDS,
+  initialFormValues,
+  STATES,
+} from "src/utils/variables";
 import { useAppDispatch } from "src/hooks/hooks";
 import {
   addNewEmployee,
@@ -10,10 +16,18 @@ import {
 import SelectInput from "src/components/UI/SelectInput/SelectInput";
 import { format } from "date-fns";
 import { v4 } from "uuid";
+import { BsFillCheckCircleFill } from "react-icons/bs";
+import { BiError } from "react-icons/bi";
+import Button from "../UI/Button/Button";
+import Modal from "../UI/Dialog/Dialog";
 
 export default function NewEmployeeForm() {
   const [formValues, setFormValues] =
     useState<NewEmployeeValues>(initialFormValues);
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -27,7 +41,7 @@ export default function NewEmployeeForm() {
       _value =
         typeof value === "string"
           ? value
-          : format(new Date(value), "dd/MM/yyyy");
+          : format(new Date(value), "dd MMM yyyy");
     } else if (e) _value = String(e.target.value);
 
     setFormValues((prev: NewEmployeeValues) => ({
@@ -37,27 +51,49 @@ export default function NewEmployeeForm() {
     }));
   };
 
-  const handleAddEmployee = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleResetEmployee = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    dispatch(addNewEmployee(formValues));
-  };
-
-  const handleResetEmployee = () => {
     setFormValues(initialFormValues);
     dispatch(resetNewEmployee());
   };
 
+  const handleToggleValid = () => {
+    setIsValid((prev) => !prev);
+  };
+
+  const handleToggleError = () => {
+    setHasError((prev) => !prev);
+  };
+
+  const handleAddEmployee = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (
+      Object.values(formValues).includes("") ||
+      Object.values(formValues).includes(0)
+    ) {
+      setIsSubmitted(true);
+      handleToggleError();
+    } else {
+      setIsSubmitted(false);
+      dispatch(addNewEmployee(formValues));
+      handleToggleValid();
+      handleResetEmployee(e);
+    }
+  };
+
   return (
-    <div className="px-16 py-5">
+    <div className="sm:px-16 p-5 text-center sm:text-left">
       <h2 className="text-2xl font-header text-primary mb-4">
         Create Employee
       </h2>
-      <form onSubmit={handleAddEmployee}>
-        <div className="columns-2 text-center shadow rounded p-10">
+      <form>
+        <div className="sm:columns-2 text-center shadow rounded p-3 sm:p-10">
           {FORM_FIELDS.map((field) => (
-            <div key={field.id} className="w-full my-1 flex items-center">
+            <div key={field.id} className="w-full my-1 flex items-center gap-2">
               <label htmlFor={field.id} className="w-1/4 text-left">
                 {field.placeholder}
+                {!formValues[field.id as keyof NewEmployeeValues] &&
+                  isSubmitted && <span className="text-danger"> * </span>}
               </label>
               {(field.type === "text" || field.type === "number") && (
                 <input
@@ -65,9 +101,10 @@ export default function NewEmployeeForm() {
                   id={field.id}
                   name={field.placeholder}
                   placeholder={field.placeholder}
+                  value={formValues[field.id as keyof NewEmployeeValues]}
                   onChange={(e) => handleChangeFormValue(field.id, e)}
                   min={0}
-                  className="bg-secondary rounded h-10 px-2 w-1/3"
+                  className="bg-secondary rounded h-10 px-2 w-3/4 sm:w-1/3"
                 />
               )}
               {field.type === "date" && (
@@ -83,27 +120,30 @@ export default function NewEmployeeForm() {
                   id={field.id}
                   name={field.placeholder}
                   value={formValues[field.id as keyof NewEmployeeValues]}
-                  handleChangeFormValue={handleChangeFormValue}
+                  options={field.id === "state" ? STATES : DEPARTMENTS}
+                  handleChangeInput={handleChangeFormValue}
                 />
               )}
             </div>
           ))}
         </div>
         <div className="flex items-center justify-center gap-10 py-10">
-          <button
-            type="submit"
-            className="h-10 w-32 bg-primary text-white px-2 rounded"
-          >
-            Submit
-          </button>
-          <button
-            onClick={handleResetEmployee}
-            className="h-10 w-32 bg-danger text-white px-2 rounded"
-          >
-            Reset
-          </button>
+          <Button click={handleAddEmployee} name="Submit" />
+          <Button click={handleResetEmployee} name="Reset" isDanger={true} />
         </div>
       </form>
+      <Modal
+        isOpen={isValid}
+        handleClose={handleToggleValid}
+        icon={<BsFillCheckCircleFill size="2.5rem" color={COLORS.primary} />}
+        content="New employee has been successfully created !"
+      />
+      <Modal
+        isOpen={hasError}
+        handleClose={handleToggleError}
+        icon={<BiError size="2.5rem" color={COLORS.danger} />}
+        content="Veuillez renseigner tous les champs !"
+      />
     </div>
   );
 }

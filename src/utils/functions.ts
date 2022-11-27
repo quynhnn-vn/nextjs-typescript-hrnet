@@ -1,35 +1,52 @@
-import { DateType, CalendarCell } from "./types";
-import { addMonths, addYears, getDaysInMonth, subMonths } from "date-fns";
+import { CalendarCell } from "./types";
+import {
+  addMonths,
+  addYears,
+  format,
+  getDaysInMonth,
+  subMonths,
+} from "date-fns";
 import { NextRouter } from "next/router";
 
 export const handlePushRouter = (router: NextRouter, path: string) => {
   router.push(path);
 };
 
-export function changeDateYear(date: Date, isNextYear: boolean): Date {
-  let newDate = date;
-  return addYears(newDate, isNextYear ? 1 : -1);
-}
+export const changeDateYear = (
+  date: string | number,
+  isNextYear: boolean
+): string => {
+  let newDate = date ? new Date(date) : new Date();
+  return format(addYears(newDate, isNextYear ? 1 : -1), "dd MMM yyyy");
+};
 
-export function changeDateMonth(date: Date, isNextMonth: boolean): Date {
-  let newDate = date;
+export const changeDateMonth = (
+  date: string | number,
+  isNextMonth: boolean,
+  isChangeNewDate: boolean
+): string => {
+  let newDate = date ? new Date(date) : new Date();
 
-  if (date.getMonth() === 0 && !isNextMonth) {
+  if (newDate.getMonth() === 0 && !isNextMonth) {
     newDate.setFullYear(newDate.getFullYear() - 1);
     newDate.setMonth(11);
-    return newDate;
-  }
-
-  if (date.getMonth() === 11 && isNextMonth) {
+    return isChangeNewDate
+      ? format(newDate, "MMMM")
+      : format(newDate, "dd MMM yyyy");
+  } else if (newDate.getMonth() === 11 && isNextMonth) {
     newDate.setFullYear(newDate.getFullYear() + 1);
     newDate.setMonth(0);
-    return newDate;
+    return isChangeNewDate
+      ? format(newDate, "MMMM")
+      : format(newDate, "dd MMM yyyy");
   }
+  newDate = addMonths(newDate, isNextMonth ? 1 : -1);
+  return isChangeNewDate
+    ? format(newDate, "MMMM")
+    : format(newDate, "dd MMM yyyy");
+};
 
-  return addMonths(newDate, isNextMonth ? 1 : -1);
-}
-
-function getCalendarCells(date: Date): CalendarCell[] {
+const getCalendarCells = (date: Date): CalendarCell[] => {
   const daysArray = new Array(getDaysInMonth(date)).fill(1);
   const calendarCells: CalendarCell[] = [];
 
@@ -59,15 +76,14 @@ function getCalendarCells(date: Date): CalendarCell[] {
   }
 
   return calendarCells;
-}
+};
 
-export function getCalendarRows(date: Date): Array<CalendarCell[]> {
+export const getCalendarRows = (date: Date): Array<CalendarCell[]> => {
   const cells = getCalendarCells(date);
   const rows: Array<CalendarCell[]> = [];
 
   for (let i = 0; i < cells.length; i += 7) {
     rows.push(cells.slice(i, i + 7));
   }
-
   return rows;
-}
+};

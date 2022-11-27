@@ -1,3 +1,5 @@
+import { getDaysInMonth } from "date-fns";
+import { range } from "lodash";
 import { v4 } from "uuid";
 
 export const COLORS = {
@@ -15,8 +17,8 @@ export const initialFormValues = {
   id: v4(),
   firstName: "",
   lastName: "",
-  birthday: "01/01/2020",
-  startDate: "01/01/2022",
+  birthday: "",
+  startDate: "",
   street: "",
   city: "",
   state: "",
@@ -333,3 +335,76 @@ export const DEPARTMENTS = [
     name: "Legal",
   },
 ];
+
+export const ENTRIES = [10, 25, 50, 100].map((entry) => ({
+  id: String(entry),
+  name: String(entry),
+}));
+
+export const YEARS = range(
+  new Date().getFullYear() - 50,
+  new Date().getFullYear() + 1,
+  1
+).map((y) => ({
+  id: String(y),
+  name: String(y),
+}));
+
+export const MONTHS = [
+  {
+    id: "January",
+    name: "January",
+  },
+  {
+    id: "February",
+    name: "February",
+  },
+  {
+    id: "March",
+    name: "March",
+  },
+  {
+    id: "April",
+    name: "April",
+  },
+  {
+    id: "May",
+    name: "May",
+  },
+  {
+    id: "June",
+    name: "June",
+  },
+  {
+    id: "July",
+    name: "July",
+  },
+  {
+    id: "August",
+    name: "August",
+  },
+  {
+    id: "September",
+
+    name: "September",
+  },
+  { id: "October", name: "October" },
+  {
+    id: "November",
+    name: "November",
+  },
+  {
+    id: "December",
+    name: "December",
+  },
+];
+
+export const DAYS = (year: number | undefined, month: number | undefined) =>
+  [
+    ...Array(
+      getDaysInMonth(year && month ? new Date(year, month) : new Date())
+    ).keys(),
+  ].map((d) => ({
+    id: d + 1 <= 10 ? "0" + String(d + 1) : String(d + 1),
+    name: d + 1 <= 10 ? "0" + String(d + 1) : String(d + 1),
+  }));

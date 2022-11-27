@@ -3,7 +3,7 @@ import ListEmployees from "src/components/ListEmployees/ListEmployees";
 
 const List: NextPage = () => {
   return (
-    <main className="font-body h-screen">
+    <main className="font-body flex-grow">
       <ListEmployees />
     </main>
   );

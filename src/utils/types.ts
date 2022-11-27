@@ -11,6 +11,7 @@ export type ChangeFormValueType = (
 export type SetStateBoolean = React.Dispatch<React.SetStateAction<boolean>>;
 
 export interface NewEmployeeValues {
+  id: string;
   firstName: string;
   lastName: string;
   birthday: string;
@@ -47,9 +48,10 @@ export interface DatePickerProps {
 }
 
 export interface DatePickerSelectorProps {
+  id: string;
   selectedDate: DateType;
-  shownDate: DateType;
-  setShownDate: React.Dispatch<React.SetStateAction<DateType>>;
+  shownDate: string | number;
+  setShownDate: React.Dispatch<React.SetStateAction<string | number>>;
 }
 
 export interface DatePickerCalendarProps {
@@ -65,12 +67,6 @@ export interface CalendarCell {
   value: number;
 }
 
-export interface ModalProps {
-  isShowModal: boolean;
-  setIsShowModal: SetStateBoolean;
-  children: React.ReactNode;
-}
-
 export interface EmployeesState {
   newEmployee: NewEmployeeValues;
   listEmployees: NewEmployeeValues[];
@@ -80,7 +76,8 @@ export interface SelectInputProps {
   id: string;
   name: string;
   value: string | number;
-  handleChangeFormValue: ChangeFormValueType;
+  options: SelectItemType[];
+  handleChangeInput: ChangeFormValueType;
 }
 
 export type SelectItemType = {
@@ -91,9 +88,9 @@ export type SelectItemType = {
 export interface SelectDropDownProps {
   id: string;
   value: string | number;
-  handleChangeFormValue: ChangeFormValueType;
-  handleHideCalendar: () => void;
+  handleHideDropDown: () => void;
   options: SelectItemType[];
+  handleChangeInput: ChangeFormValueType;
 }
 export interface TableProps {
   listEmployees: Array<NewEmployeeValues>;
@@ -102,4 +99,33 @@ export interface TableProps {
 export interface SearchInputProps {
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface PaginationProps {
+  listEmployees: NewEmployeeValues[];
+  selectedEntry: SelectItemType;
+  setSelectedEntry: React.Dispatch<React.SetStateAction<SelectItemType>>;
+  onGoToNextPage: () => void;
+  onGoToPreviousPage: () => void;
+  onGoToSelectedPage: (page: number) => void;
+  currentPage: number;
+  totalPage: number;
+}
+
+export interface ButtonProps {
+  click: (e: React.MouseEvent<HTMLElement>) => void;
+  name: string;
+  isDanger?: boolean;
+}
+
+export interface ModalProps {
+  isOpen: boolean;
+  handleClose: () => void;
+  icon: React.ReactNode;
+  content: string;
+}
+export interface NewDateType {
+  day: string;
+  month: string;
+  year: string;
 }

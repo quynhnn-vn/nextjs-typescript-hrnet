@@ -45,6 +45,18 @@ export const newEmployeeSlice = createSlice({
     resetNewEmployee: (state: EmployeesState) => {
       state.newEmployee = initialFormValues;
     },
+    deleteEmployee: (
+      state: EmployeesState,
+      action: PayloadAction<NewEmployeeValues>
+    ) => {
+      state.listEmployees = state.listEmployees.filter(
+        (employee) => employee.id !== action.payload.id
+      );
+      localStorage.setItem(
+        "listEmployees",
+        JSON.stringify(state.listEmployees)
+      );
+    },
   },
   // special reducer for hydrating the state. Special case for next-redux-wrapper
   extraReducers: {
@@ -57,8 +69,12 @@ export const newEmployeeSlice = createSlice({
   },
 });
 
-export const { addNewEmployee, getListEmployees, resetNewEmployee } =
-  newEmployeeSlice.actions;
+export const {
+  addNewEmployee,
+  getListEmployees,
+  resetNewEmployee,
+  deleteEmployee,
+} = newEmployeeSlice.actions;
 export const selectListEmployees = (state: AppState) => {
   let localEmployees = [];
   if (typeof window !== "undefined") {

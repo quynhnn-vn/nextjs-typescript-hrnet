@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { DateInputProps } from "src/utils/types";
 import DatePicker from "src/components/UI/DateInput/DatePicker";
-import { format } from "date-fns";
 import { Popover } from "@mui/material";
 
 export default function DateInput(props: DateInputProps) {
@@ -21,11 +20,12 @@ export default function DateInput(props: DateInputProps) {
   return (
     <>
       <button
+        id={id}
         name={name}
-        className="bg-secondary rounded h-10 px-2 w-1/3 text-left"
+        className="bg-secondary rounded h-10 px-2 w-3/4 sm:w-1/3 text-left"
         onClick={handleShowCalendar}
       >
-        {selectedDate}
+        {selectedDate || <span className="text-gray">{name}</span>}
       </button>
       <Popover
         id={id}

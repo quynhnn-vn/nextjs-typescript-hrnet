@@ -5,7 +5,7 @@ import Footer from "src/components/UI/Footer/Footer";
 
 export default function Layout({ children }: ChildrenProps): JSX.Element {
   return (
-    <div>
+    <div className="flex flex-col h-screen">
       <Header />
       {children}
       <Footer />

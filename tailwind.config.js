@@ -20,6 +20,7 @@ module.exports = {
       danger: "#ff6347",
       white: "#ffffff",
       black: "#000000",
+      gray: "#a0a6b2",
     },
   },
   plugins: [],

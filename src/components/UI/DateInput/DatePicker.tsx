@@ -9,8 +9,9 @@ export default function DatePicker(props: DatePickerProps) {
   const [shownDate, setShownDate] = useState(selectedDate);
 
   return (
-    <div className="w-80 shadow-2xl rounded">
+    <div className="w-full sm:w-96 shadow-2xl rounded">
       <DatePickerSelector
+        id={id}
         selectedDate={selectedDate}
         shownDate={shownDate}
         setShownDate={setShownDate}
